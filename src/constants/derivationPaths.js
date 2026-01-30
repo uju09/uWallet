@@ -1,0 +1,1 @@
+export const SOLANA_PATH = "m/44'/501'";
