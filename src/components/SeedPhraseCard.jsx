@@ -1,10 +1,13 @@
 import { useState } from 'react';
-import { ShieldCheck, Clipboard, Check } from 'lucide-react';
+import { ShieldCheck, Clipboard, Check, X } from 'lucide-react';
+import { useSeedPhrase } from '../hooks/useSeedPhrase';
 
 const SeedPhraseCard = ({ onConfirm }) => {
   const [words, setWords] = useState(Array(12).fill(''));
   const [focusedIndex, setFocusedIndex] = useState(null);
   const [isPasted, setIsPasted] = useState(false);
+
+  const { clearSeedPhrase, generatePhrase } = useSeedPhrase();
 
   const handleWordChange = (index, value) => {
     const newWords = [...words];
@@ -28,11 +31,24 @@ const SeedPhraseCard = ({ onConfirm }) => {
     }
   };
 
+  const handleGenerate = () => {
+    const mnemonic = generatePhrase();
+    const words = mnemonic.split(' ');
+    setWords(words);
+    console.log(words);
+
+  }
+
   const handleSubmit = () => {
     const filledWords = words.filter(w => w.length > 0);
     if (filledWords.length === 12 && onConfirm) {
       onConfirm(words);
     }
+  };
+
+  const handleClear = () => {
+    setWords(Array(12).fill(''));
+    clearSeedPhrase();
   };
 
   const isComplete = words.every(w => w.length > 0);
@@ -55,29 +71,38 @@ const SeedPhraseCard = ({ onConfirm }) => {
           </div>
         </div>
 
-        {/* Paste Button */}
-        <button
-          onClick={handlePaste}
-          className="w-full mb-4 bg-[#1A2920] hover:bg-[#253d2c] border border-white/5 hover:border-[#D4FF00]/30 text-white py-2.5 rounded-xl flex items-center justify-center gap-2 transition-all text-xs font-bold uppercase tracking-wider"
-        >
-          {isPasted ? (
-            <>
-              <Check className="w-4 h-4 text-[#D4FF00]" />
-              <span className="text-[#D4FF00]">Pasted!</span>
-            </>
-          ) : (
-            <>
-              <Clipboard className="w-4 h-4" />
-              Paste from Clipboard
-            </>
-          )}
-        </button>
+        {/* Paste & Clear Buttons */}
+        <div className="flex gap-2 mb-4">
+          <button
+            onClick={handlePaste}
+            className="flex-1 bg-[#1A2920] hover:bg-[#253d2c] border border-white/5 hover:border-[#D4FF00]/30 text-white py-2.5 rounded-xl flex items-center justify-center gap-2 transition-all text-xs font-bold uppercase tracking-wider"
+          >
+            {isPasted ? (
+              <>
+                <Check className="w-4 h-4 text-[#D4FF00]" />
+                <span className="text-[#D4FF00]">Pasted!</span>
+              </>
+            ) : (
+              <>
+                <Clipboard className="w-4 h-4" />
+                Paste from Clipboard
+              </>
+            )}
+          </button>
+          <button
+            onClick={handleClear}
+            className="px-4 bg-[#1A2920] hover:bg-red-500/10 border border-white/5 hover:border-red-500/30 text-[#8FA396] hover:text-red-400 py-2.5 rounded-xl flex items-center justify-center gap-2 transition-all text-xs font-bold uppercase tracking-wider"
+          >
+            <X className="w-4 h-4" />
+            Clear
+          </button>
+        </div>
 
         {/* 12 Word Grid */}
-        <div className="grid grid-cols-3 gap-2 mb-6">
+        <div className="grid grid-cols-3 gap-3 mb-6">
           {words.map((word, index) => (
             <div key={index} className="relative">
-              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[10px] text-[#8FA396] font-mono select-none z-10">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-[#8FA396] font-mono select-none z-10">
                 {index + 1}
               </span>
               <input
@@ -87,7 +112,7 @@ const SeedPhraseCard = ({ onConfirm }) => {
                 onFocus={() => setFocusedIndex(index)}
                 onBlur={() => setFocusedIndex(null)}
                 placeholder="word"
-                className={`w-full bg-[#1A2920] rounded-xl py-2.5 pl-7 pr-2 text-xs font-medium font-mono transition-all focus:outline-none ${focusedIndex === index
+                className={`w-full bg-[#1A2920] rounded-xl py-4 pl-9 pr-3 text-sm font-medium font-mono transition-all focus:outline-none ${focusedIndex === index
                   ? 'text-white border border-[#D4FF00]/50 shadow-[0_0_10px_rgba(212,255,0,0.1)]'
                   : word
                     ? 'text-white border border-white/10'
@@ -97,6 +122,7 @@ const SeedPhraseCard = ({ onConfirm }) => {
             </div>
           ))}
         </div>
+
 
         {/* Progress Indicator */}
         <div className="mb-4">
@@ -124,7 +150,7 @@ const SeedPhraseCard = ({ onConfirm }) => {
           >
             {isComplete ? 'Continue' : 'Enter all 12 words'}
           </button>
-          <button className='w-full py-3.5 rounded-xl font-bold transition-all flex items-center justify-center gap-2 bg-[#1A2920] text-[#8FA396] bg-[#D4FF00] hover:bg-[#bce600] text-black shadow-lg shadow-[#D4FF00]/10'>Generate Seed Phrase</button>
+          <button className='w-full py-3.5 rounded-xl font-bold transition-all flex items-center justify-center gap-2 bg-[#1A2920] text-[#8FA396] bg-[#D4FF00] hover:bg-[#bce600] text-black shadow-lg shadow-[#D4FF00]/10' onClick={handleGenerate}>Generate Seed Phrase</button>
         </div>
 
         {/* Security Note */}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Lock, EyeOff, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,9 +18,14 @@ const Login = () => {
     }
   };
 
+  useEffect(() => {
+    const storedUsername = localStorage.setItem('name', username);
+    console.log(storedUsername);
+  }, [username]);
+
   return (
     <div className="min-h-screen bg-[#0C120F] flex items-center justify-center p-4">
-      <div className="max-w-sm w-full bg-[#142018] rounded-[32px] p-8 border border-white/5 shadow-2xl relative overflow-hidden text-center">
+      <div className="max-w-sm w-full bg-[#142018] rounded-[32px] p-8 border border-white/5 shadow-2xl relative overflow-hidden text-center pb-10">
         {/* Background Decoration */}
         <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-48 h-48 bg-[#D4FF00] opacity-5 blur-[60px] rounded-full pointer-events-none"></div>
 
@@ -31,7 +36,7 @@ const Login = () => {
 
         {/* Title */}
         <h2 className="text-2xl font-bold text-white mb-2">Welcome Back</h2>
-        <p className="text-[#8FA396] text-sm mb-8">Enter your password to unlock</p>
+        <p className="text-[#8FA396] text-sm mb-8">Enter your name to unlock</p>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -54,13 +59,6 @@ const Login = () => {
             onClick={handleLogin} disabled={username === ''}
           >
             Unlock Wallet
-          </button>
-
-          <button
-            type="button"
-            className="text-xs text-[#8FA396] hover:text-white font-medium mt-2 transition-colors"
-          >
-            Forgot Password?
           </button>
         </form>
       </div>
