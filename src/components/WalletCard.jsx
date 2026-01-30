@@ -118,3 +118,41 @@ const WalletCard = ({
 };
 
 export default WalletCard;
+
+export const WalletGrid = ({
+  wallets = [],
+  onDelete,
+  onCopyPublicKey,
+  onRevealPrivateKey,
+  className = '',
+}) => {
+  // If no wallets provided, show placeholder cards
+  const displayWallets = wallets.length > 0 ? wallets : [
+    { id: 1, walletName: 'Wallet 1', publicKey: '6jxuteQ8cyiouhEWJZXKVMqtiaqcLGCsZsLiZed3jSLE', privateKey: '' },
+    { id: 2, walletName: 'Wallet 2', publicKey: '8kxvufR9dzjpviIFXKWLNrujbrLHDtAtMtLjAfe4kTMF', privateKey: '' },
+    { id: 3, walletName: 'Wallet 3', publicKey: '9lywtgS0eakqwjJGYMXOsvkldscIEuMuNkBgf5lUNOG', privateKey: '' },
+    { id: 4, walletName: 'Wallet 4', publicKey: '9lywtgS0eakqwjJGYMXOsvkldscIEuMuNkBgf5lUNOG', privateKey: '' },
+    { id: 5, walletName: 'Wallet 5', publicKey: '9lywtgS0eakqwjJGYMXOsvkldscIEuMuNkBgf5lUNOG', privateKey: '' },
+    { id: 6, walletName: 'Wallet 6', publicKey: '9lywtgS0eakqwjJGYMXOsvkldscIEuMuNkBgf5lUNOG', privateKey: '' },
+    { id: 7, walletName: 'Wallet 7', publicKey: '9lywtgS0eakqwjJGYMXOsvkldscIEuMuNkBgf5lUNOG', privateKey: '' },
+    { id: 8, walletName: 'Wallet 8', publicKey: '9lywtgS0eakqwjJGYMXOsvkldscIEuMuNkBgf5lUNOG', privateKey: '' },
+    { id: 9, walletName: 'Wallet 9', publicKey: '9lywtgS0eakqwjJGYMXOsvkldscIEuMuNkBgf5lUNOG', privateKey: '' },
+  ];
+
+  return (
+    <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ${className}`}>
+      {displayWallets.map((wallet, index) => (
+        <WalletCard
+          key={wallet.id || index}
+          walletName={wallet.walletName || `Wallet ${index + 1}`}
+          publicKey={wallet.publicKey}
+          privateKey={wallet.privateKey}
+          onDelete={() => onDelete?.(wallet.id || index)}
+          onCopyPublicKey={() => onCopyPublicKey?.(wallet.publicKey)}
+          onRevealPrivateKey={() => onRevealPrivateKey?.(wallet.id || index)}
+        />
+      ))}
+    </div>
+  );
+};
+
