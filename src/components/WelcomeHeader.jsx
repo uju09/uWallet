@@ -16,7 +16,7 @@ const WelcomeHeader = ({
   };
 
   return (
-    <div className={`flex items-center justify-between p-4 bg-[#0C120F] rounded-[24px] w-sm border border-white/5 ${className}`}>
+    <div className={`flex items-center justify-between p-4 bg-[#0C120F] rounded-[24px] border border-white/5 ${className}`}>
       <div className="flex items-center gap-3">
         {/* Avatar */}
         <div className="relative">

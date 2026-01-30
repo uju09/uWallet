@@ -8,7 +8,7 @@ export { NftCard, NftGrid } from './NftCard';
 export { QuickActionButton, QuickActions } from './QuickActions';
 export { default as WelcomeHeader } from './WelcomeHeader';
 export { default as ClearWallet } from './ClearWallet';
-export { default as WalletCard } from './WalletCard';
+export { default as WalletCard, WalletGrid } from './WalletCard';
 export { default as SecretPhraseCard } from './SecretPhraseCard';
 
 
