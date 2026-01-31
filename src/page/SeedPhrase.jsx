@@ -1,19 +1,19 @@
 import React from 'react'
 import { SeedPhraseCard } from '../components'
 import { useSeedPhrase } from '../hooks/useSeedPhrase'
-import { useNavigate } from 'react-router-dom'
+import { usePageTransition } from '../context/PageTransitionContext'
 
 const SeedPhrase = () => {
 
   const { validatePhrase, storePhrase } = useSeedPhrase();
-  const navigate = useNavigate();
+  const { navigateWithTransition } = usePageTransition();
 
   const handleConfirm = (words) => {
     const mnemonic = words.join(' ').trim();
     const isValid = validatePhrase(mnemonic);
     if (isValid) {
       storePhrase(mnemonic);
-      navigate('/wallet');
+      navigateWithTransition('/wallet', 'Loading your wallet...');
     }
   }
   return (

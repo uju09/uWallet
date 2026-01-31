@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Lock, EyeOff, Eye } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { usePageTransition } from '../context/PageTransitionContext';
 
 const Login = () => {
   const [username, setUsername] = useState('');
-
-  const navigate = useNavigate();
+  const { navigateWithTransition } = usePageTransition();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,13 +13,12 @@ const Login = () => {
 
   const handleLogin = () => {
     if (username) {
-      navigate('/seed-phrase');
+      navigateWithTransition('/seed-phrase', 'Setting up your wallet...');
     }
   };
 
   useEffect(() => {
     localStorage.setItem('name', username);
-    localStorage.setItem('walletId', 1);
   }, [username]);
 
   return (

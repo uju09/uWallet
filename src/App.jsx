@@ -4,17 +4,18 @@ import Wallet from './page/Wallet';
 import { Routes, Route } from 'react-router-dom';
 import Login from './page/Login';
 import SeedPhrase from './page/SeedPhrase';
+import { PageTransitionProvider } from './context/PageTransitionContext';
 
 function App() {
   return (
-    <div>
+    <PageTransitionProvider>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/wallet" element={<Wallet />} />
         <Route path="/seed-phrase" element={<SeedPhrase />} />
       </Routes>
-    </div>
+    </PageTransitionProvider>
   );
 }
 

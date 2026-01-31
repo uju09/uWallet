@@ -49,7 +49,7 @@ const WalletCard = ({
 
   return (
     <div
-      className={`bg-[#0C120F] rounded-[32px] p-6 border border-white/5 shadow-2xl relative group hover:border-white/10 transition-colors ${className}`}
+      className={`bg-[#0C120F] rounded-[32px] p-6 border border-white/5 shadow-2xl relative group hover:border-white/10 transition-colors animate-fade-in ${className}`}
     >
       {/* Card Header */}
       <div className="flex justify-between items-center mb-8 px-1">
@@ -132,26 +132,37 @@ export const WalletGrid = ({
   onRevealPrivateKey,
   className = '',
 }) => {
-  // const displayWallets = wallets.length > 0 ? wallets : [
-  //   { id: 1, walletName: 'Wallet 1', publicKey: '6jxuteQ8cyiouhEWJZXKVMqtiaqcLGCsZsLiZed3jSLE', privateKey: '' },
-  //   { id: 2, walletName: 'Wallet 2', publicKey: '8kxvufR9dzjpviIFXKWLNrujbrLHDtAtMtLjAfe4kTMF', privateKey: '' },
-  //   { id: 3, walletName: 'Wallet 3', publicKey: '9lywtgS0eakqwjJGYMXOsvkldscIEuMuNkBgf5lUNOG', privateKey: '' },
-  // ];
+  const [deletingIndex, setDeletingIndex] = useState(null);
 
   const displayWallets = wallets || [];
+
+  const handleDelete = (index) => {
+    setDeletingIndex(index);
+    setTimeout(() => {
+      onDelete?.(index);
+      setDeletingIndex(null);
+    }, 300);
+  };
 
   return (
     <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ${className}`}>
       {displayWallets.length > 0 ? displayWallets.map((wallet, index) => (
-        <WalletCard
+        <div
           key={wallet.id || index}
-          walletName={wallet.walletName || `Wallet ${index + 1}`}
-          publicKey={wallet.publicKey}
-          privateKey={wallet.encryptedPrivateKey}
-          onDelete={() => onDelete?.(wallet.id || index)}
-          onCopyPublicKey={() => onCopyPublicKey?.(wallet.publicKey)}
-          onRevealPrivateKey={() => onRevealPrivateKey?.(wallet.id || index)}
-        />
+          className={`transition-all duration-300 ${deletingIndex === index
+              ? 'opacity-0 scale-95 -translate-y-2'
+              : 'opacity-100 scale-100 translate-y-0'
+            }`}
+        >
+          <WalletCard
+            walletName={wallet.walletName || `Wallet ${index + 1}`}
+            publicKey={wallet.publicKey}
+            privateKey={wallet.encryptedPrivateKey}
+            onDelete={() => handleDelete(index)}
+            onCopyPublicKey={() => onCopyPublicKey?.(wallet.publicKey)}
+            onRevealPrivateKey={() => onRevealPrivateKey?.(wallet.id || index)}
+          />
+        </div>
       )) : <div>No wallets found</div>}
     </div>
   );
