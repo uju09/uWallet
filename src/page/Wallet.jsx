@@ -21,26 +21,37 @@ const Wallet = () => {
   const { getStoredPhrase } = useSeedPhrase();
   const navigate = useNavigate();
   const [phrase, setPhrase] = useState('');
+  const { generateWallet } = useWallet();
 
   const handleLogout = () => {
     localStorage.clear();
     navigate('/');
   };
 
-  const seed = getStoredPhrase();
-  const { isWalletGenerated, publicKey, encryptedPrivateKey } = useWallet(seed);
+  useEffect(() => {
+    const handleWalletGeneration = async () => {
 
-  if (isWalletGenerated) {
-    const newWallet = {
-      walletId,
-      publicKey,
-      encryptedPrivateKey,
+      if (walletId > 0) {
+        const result = await generateWallet(walletId);
+        if (result) {
+          const newWallet = {
+            walletId,
+            publicKey: result.publicKey,
+            encryptedPrivateKey: result.encryptedPrivateKey,
+          };
+
+          setWallets((prev) => {
+            const updated = [...prev, newWallet];
+            localStorage.setItem('wallets', JSON.stringify(updated));
+            return updated;
+          });
+          // We don't increment walletId here, it's already incremented by the button click
+        }
+      }
     };
-    setWallets((prev) => ([...prev, newWallet]));
-    localStorage.setItem('wallets', JSON.stringify([...prev, newWallet]));
-    localStorage.setItem('walletId', walletId + 1);
-  }
 
+    handleWalletGeneration();
+  }, [walletId]);
 
 
   useEffect(() => {
@@ -59,7 +70,13 @@ const Wallet = () => {
       return;
     }
     setPhrase(storedPhrase);
+
+    const savedWallets = JSON.parse(localStorage.getItem('wallets') || "[]");
+    setWallets(savedWallets);
+
   }, []);
+
+
 
 
   return (

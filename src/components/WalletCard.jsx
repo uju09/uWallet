@@ -98,7 +98,17 @@ const WalletCard = ({
           </label>
           <div className="flex justify-between items-center gap-4">
             <div className="flex gap-0.5 overflow-hidden text-[#8FA396]/50 font-mono text-sm">
-              {showPrivateKey ? privateKey : maskedPrivateKey}
+              {showPrivateKey ? (() => {
+                try {
+                  if (typeof privateKey === 'string') return privateKey;
+                  if (privateKey?.encryptedData && privateKey?.nonce) {
+                    return decryptData(privateKey);
+                  }
+                  return "Invalid Key Format";
+                } catch (e) {
+                  return "Decryption Error";
+                }
+              })() : maskedPrivateKey}
             </div>
             <button
               onClick={handleTogglePrivateKey}
@@ -142,7 +152,7 @@ export const WalletGrid = ({
           key={wallet.id || index}
           walletName={wallet.walletName || `Wallet ${index + 1}`}
           publicKey={wallet.publicKey}
-          privateKey={decryptData(wallet.privateKey)}
+          privateKey={wallet.encryptedPrivateKey}
           onDelete={() => onDelete?.(wallet.id || index)}
           onCopyPublicKey={() => onCopyPublicKey?.(wallet.publicKey)}
           onRevealPrivateKey={() => onRevealPrivateKey?.(wallet.id || index)}

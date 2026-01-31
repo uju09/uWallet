@@ -8,7 +8,7 @@ import { ChevronDown, Copy } from 'lucide-react';
 const SecretPhraseCard = ({
   title = 'Your Secret Phrase',
   secretPhrase = [],
-  defaultOpen = true,
+  defaultOpen = false,
   onCopy,
   className = '',
 }) => {
