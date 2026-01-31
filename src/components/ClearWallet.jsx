@@ -1,10 +1,14 @@
 import { Trash2 } from 'lucide-react';
 
-const ClearWallet = ({ label = 'Clear Wallet', className = '', onClick }) => {
+const ClearWallet = ({ label = 'Clear Wallet', className = '' }) => {
+  const handleClearWallet = () => {
+    localStorage.removeItem('wallets');
+    window.location.reload();
+  };
   return (
     <div className={`py-4 ${className}`}>
       <button
-        onClick={onClick}
+        onClick={handleClearWallet}
         className="group relative w-full bg-[#1A2920] hover:bg-red-500/20 text-white hover:text-red-400 border border-white/5 hover:border-red-500/30 font-bold py-5 rounded-[24px] transition-all flex items-center justify-between px-6 overflow-hidden"
       >
         <span className="z-10 text-lg">{label}</span>

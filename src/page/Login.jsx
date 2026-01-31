@@ -19,8 +19,8 @@ const Login = () => {
   };
 
   useEffect(() => {
-    const storedUsername = localStorage.setItem('name', username);
-    console.log(storedUsername);
+    localStorage.setItem('name', username);
+    localStorage.setItem('walletId', 1);
   }, [username]);
 
   return (

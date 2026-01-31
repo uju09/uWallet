@@ -1,7 +1,7 @@
 export { default as BrandIdentity } from './BrandIdentity';
 export { default as WalletAssetCard } from './WalletAssetCard';
 export { default as SeedPhraseCard } from './SeedPhraseCard';
-export { default as PrimaryActionButton } from './PrimaryActionButton';
+export { default as AddWalletButton } from './AddWalletButton';
 export { default as TokenListItem } from './TokenListItem';
 export { TransactionItem, TransactionList } from './TransactionItem';
 export { NftCard, NftGrid } from './NftCard';

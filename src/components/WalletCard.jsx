@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Trash2, Copy, Eye, EyeOff } from 'lucide-react';
+import { decryptData } from '../storage/secureStorage';
 
 /**
  * WalletCard Component
@@ -97,7 +98,17 @@ const WalletCard = ({
           </label>
           <div className="flex justify-between items-center gap-4">
             <div className="flex gap-0.5 overflow-hidden text-[#8FA396]/50 font-mono text-sm">
-              {showPrivateKey ? privateKey : maskedPrivateKey}
+              {showPrivateKey ? (() => {
+                try {
+                  if (typeof privateKey === 'string') return privateKey;
+                  if (privateKey?.encryptedData && privateKey?.nonce) {
+                    return decryptData(privateKey);
+                  }
+                  return "Invalid Key Format";
+                } catch (e) {
+                  return "Decryption Error";
+                }
+              })() : maskedPrivateKey}
             </div>
             <button
               onClick={handleTogglePrivateKey}
@@ -126,32 +137,27 @@ export const WalletGrid = ({
   onRevealPrivateKey,
   className = '',
 }) => {
-  // If no wallets provided, show placeholder cards
-  const displayWallets = wallets.length > 0 ? wallets : [
-    { id: 1, walletName: 'Wallet 1', publicKey: '6jxuteQ8cyiouhEWJZXKVMqtiaqcLGCsZsLiZed3jSLE', privateKey: '' },
-    { id: 2, walletName: 'Wallet 2', publicKey: '8kxvufR9dzjpviIFXKWLNrujbrLHDtAtMtLjAfe4kTMF', privateKey: '' },
-    { id: 3, walletName: 'Wallet 3', publicKey: '9lywtgS0eakqwjJGYMXOsvkldscIEuMuNkBgf5lUNOG', privateKey: '' },
-    { id: 4, walletName: 'Wallet 4', publicKey: '9lywtgS0eakqwjJGYMXOsvkldscIEuMuNkBgf5lUNOG', privateKey: '' },
-    { id: 5, walletName: 'Wallet 5', publicKey: '9lywtgS0eakqwjJGYMXOsvkldscIEuMuNkBgf5lUNOG', privateKey: '' },
-    { id: 6, walletName: 'Wallet 6', publicKey: '9lywtgS0eakqwjJGYMXOsvkldscIEuMuNkBgf5lUNOG', privateKey: '' },
-    { id: 7, walletName: 'Wallet 7', publicKey: '9lywtgS0eakqwjJGYMXOsvkldscIEuMuNkBgf5lUNOG', privateKey: '' },
-    { id: 8, walletName: 'Wallet 8', publicKey: '9lywtgS0eakqwjJGYMXOsvkldscIEuMuNkBgf5lUNOG', privateKey: '' },
-    { id: 9, walletName: 'Wallet 9', publicKey: '9lywtgS0eakqwjJGYMXOsvkldscIEuMuNkBgf5lUNOG', privateKey: '' },
-  ];
+  // const displayWallets = wallets.length > 0 ? wallets : [
+  //   { id: 1, walletName: 'Wallet 1', publicKey: '6jxuteQ8cyiouhEWJZXKVMqtiaqcLGCsZsLiZed3jSLE', privateKey: '' },
+  //   { id: 2, walletName: 'Wallet 2', publicKey: '8kxvufR9dzjpviIFXKWLNrujbrLHDtAtMtLjAfe4kTMF', privateKey: '' },
+  //   { id: 3, walletName: 'Wallet 3', publicKey: '9lywtgS0eakqwjJGYMXOsvkldscIEuMuNkBgf5lUNOG', privateKey: '' },
+  // ];
+
+  const displayWallets = wallets || [];
 
   return (
     <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ${className}`}>
-      {displayWallets.map((wallet, index) => (
+      {displayWallets.length > 0 ? displayWallets.map((wallet, index) => (
         <WalletCard
           key={wallet.id || index}
           walletName={wallet.walletName || `Wallet ${index + 1}`}
           publicKey={wallet.publicKey}
-          privateKey={wallet.privateKey}
+          privateKey={wallet.encryptedPrivateKey}
           onDelete={() => onDelete?.(wallet.id || index)}
           onCopyPublicKey={() => onCopyPublicKey?.(wallet.publicKey)}
           onRevealPrivateKey={() => onRevealPrivateKey?.(wallet.id || index)}
         />
-      ))}
+      )) : <div>No wallets found</div>}
     </div>
   );
 };
