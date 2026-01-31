@@ -1,9 +1,10 @@
 import { Trash2 } from 'lucide-react';
 
-const ClearWallet = ({ label = 'Clear Wallet', className = '' }) => {
+const ClearWallet = ({ label = 'Clear Wallet', className = '', state }) => {
   const handleClearWallet = () => {
     localStorage.removeItem('wallets');
-    window.location.reload();
+    state();
+    // window.location.reload();
   };
   return (
     <div className={`py-4 ${className}`}>
