@@ -17,7 +17,7 @@ export const useWallet = () => {
       if (!seed) throw new Error("No seed phrase found");
 
       const response = await axios.post(WALLET_URI, { seed, walletID });
-      return response.data.data; // Assuming APIResponse structure { data: { ... }, status, message }
+      return response.data.data;
     } catch (err) {
       setError(err.message || "Failed to generate wallet");
       return null;

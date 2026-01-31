@@ -1,11 +1,12 @@
-import { Bell } from 'lucide-react';
+import { Bell, Power } from 'lucide-react';
 
 const WelcomeHeader = ({
   userName = 'Alex Doe',
   avatarSeed = 'Felix',
   showNotification = true,
   className = '',
-  onNotificationClick
+  onNotificationClick,
+  onLogoutClick,
 }) => {
   // Get greeting based on time of day
   const getGreeting = () => {
@@ -40,16 +41,28 @@ const WelcomeHeader = ({
         </div>
       </div>
 
-      {/* Notification Button */}
-      <button
-        onClick={onNotificationClick}
-        className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-white/5 hover:border-[#D4FF00]/50 transition-all relative"
-      >
-        <Bell className="w-5 h-5" />
-        {showNotification && (
-          <span className="absolute top-2 right-2 w-2 h-2 bg-[#D4FF00] rounded-full animate-pulse"></span>
-        )}
-      </button>
+      {/* Action Buttons */}
+      <div className="flex items-center gap-2">
+        {/* Notification Button */}
+        <button
+          onClick={onNotificationClick}
+          className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-white/5 hover:border-[#D4FF00]/50 transition-all relative"
+        >
+          <Bell className="w-5 h-5" />
+          {showNotification && (
+            <span className="absolute top-2 right-2 w-2 h-2 bg-[#D4FF00] rounded-full animate-pulse"></span>
+          )}
+        </button>
+
+        {/* Logout Button */}
+        <button
+          onClick={onLogoutClick}
+          className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-red-400 hover:bg-red-500/10 hover:border-red-500/30 hover:text-red-500 transition-all"
+          title="Log Out"
+        >
+          <Power className="w-5 h-5" />
+        </button>
+      </div>
     </div>
   );
 };
