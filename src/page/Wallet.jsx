@@ -1,21 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Bell, Settings, LogOut, LayoutGrid, List } from 'lucide-react';
 import {
   WelcomeHeader,
   BrandIdentity,
-  PrimaryActionButton,
+  AddWalletButton,
   ClearWallet,
   WalletGrid,
   WalletCard,
   SecretPhraseCard,
 } from '../components';
 import { useSeedPhrase } from '../hooks/useSeedPhrase';
-import { useEffect } from 'react';
+import { useWallet } from '../hooks/useWallet';
 import { useNavigate } from 'react-router-dom';
 
 const Wallet = () => {
 
   const [username, setUsername] = useState('');
+  const [wallets, setWallets] = useState([]);
+  const [walletId, setWalletId] = useState(0);
   const { getStoredPhrase } = useSeedPhrase();
   const navigate = useNavigate();
   const [phrase, setPhrase] = useState('');
@@ -24,6 +26,22 @@ const Wallet = () => {
     localStorage.clear();
     navigate('/');
   };
+
+  const seed = getStoredPhrase();
+  const { isWalletGenerated, publicKey, encryptedPrivateKey } = useWallet(seed);
+
+  if (isWalletGenerated) {
+    const newWallet = {
+      walletId,
+      publicKey,
+      encryptedPrivateKey,
+    };
+    setWallets((prev) => ([...prev, newWallet]));
+    localStorage.setItem('wallets', JSON.stringify([...prev, newWallet]));
+    localStorage.setItem('walletId', walletId + 1);
+  }
+
+
 
   useEffect(() => {
     const username = localStorage.getItem('name');
@@ -34,16 +52,15 @@ const Wallet = () => {
     }
 
     setUsername(username);
-
     const storedPhrase = getStoredPhrase();
 
     if (!storedPhrase) {
       navigate('/seed-phrase');
       return;
     }
-
     setPhrase(storedPhrase);
-  }, [navigate, getStoredPhrase]);
+  }, []);
+
 
   return (
     <div className="min-h-screen bg-[#0C120F] text-white px-5 sm:px-4 md:px-10 lg:px-20 py-4 sm:py-8">
@@ -53,12 +70,12 @@ const Wallet = () => {
         <WelcomeHeader userName={username} className='w-full lg:w-sm' />
 
         <div className="flex flex-wrap gap-0 sm:gap-4 items-center justify-center lg:justify-end w-full sm:w-auto">
-          <PrimaryActionButton label="Add New Wallet" className="w-[300px] sm:w-[250px]" />
+          <AddWalletButton label="Add New Wallet" className="w-[300px] sm:w-[250px]" onClick={() => setWalletId(prev => prev + 1)} />
           <ClearWallet label="Clear Wallet" className="w-[300px] sm:w-[230px]" />
         </div>
 
       </div>
-      <WalletGrid />
+      <WalletGrid wallets={JSON.parse(localStorage.getItem('wallets'))} />
     </div>
   );
 };
