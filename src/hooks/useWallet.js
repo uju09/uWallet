@@ -2,7 +2,7 @@ import { useSeedPhrase } from "./useSeedPhrase";
 import { useState } from "react";
 import axios from "axios";
 
-const WALLET_URI = "http://localhost:3000/api/wallet/generate";
+const WALLET_URI = import.meta.env.VITE_WALLET_URI;
 
 export const useWallet = () => {
   const [loading, setLoading] = useState(false);

@@ -2,11 +2,6 @@ import { useState } from 'react';
 import { Trash2, Copy, Eye, EyeOff } from 'lucide-react';
 import { decryptData } from '../storage/secureStorage';
 
-/**
- * WalletCard Component
- * Displays wallet details including public and private keys
- * with copy and reveal functionality
- */
 const WalletCard = ({
   walletName = 'Wallet 1',
   publicKey = '6jxuteQ8cyiouhEWJZXKVMqtiaqcLGCsZsLiZed3jSLE',

@@ -45,7 +45,6 @@ const Wallet = () => {
             localStorage.setItem('wallets', JSON.stringify(updated));
             return updated;
           });
-          // We don't increment walletId here, it's already incremented by the button click
         }
       }
     };
@@ -88,7 +87,7 @@ const Wallet = () => {
 
         <div className="flex flex-wrap gap-0 sm:gap-4 items-center justify-center lg:justify-end w-full sm:w-auto">
           <AddWalletButton label="Add New Wallet" className="w-[300px] sm:w-[250px]" onClick={() => setWalletId(prev => prev + 1)} />
-          <ClearWallet label="Clear Wallet" className="w-[300px] sm:w-[230px]" state={() => setWallets([])} />
+          <ClearWallet label="Clear Wallet" className="w-[300px] sm:w-[230px]" state={() => { setWallets([]); setWalletId(0) }} />
         </div>
 
       </div>
