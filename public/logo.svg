@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- 3D Cube Logo - Neon Yellow/Lime -->
+  <defs>
+    <linearGradient id="cubeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#d4ff00"/>
+      <stop offset="100%" style="stop-color:#c8f500"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Cube stroke color -->
+  <g fill="none" stroke="#d4ff00" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Top face -->
+    <polygon points="50,15 80,32 50,49 20,32" fill="none"/>
+    
+    <!-- Left face -->
+    <polygon points="20,32 50,49 50,83 20,66" fill="none"/>
+    
+    <!-- Right face -->
+    <polygon points="80,32 50,49 50,83 80,66" fill="none"/>
+    
+    <!-- Inner vertical line -->
+    <line x1="50" y1="49" x2="50" y2="83"/>
+  </g>
+</svg>
